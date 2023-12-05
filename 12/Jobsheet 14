@@ -1,0 +1,113 @@
+USE percobaan_join;
+
+select * from dosen;
+select * from hari;
+select * from kelas;
+select * from prodi;
+select * from jadwal;
+
+SELECT * 
+	FROM kelas
+	INNER JOIN prodi ON kelas.kode_prodi=prodi.kode_prodi;
+
+--  join eksplisit
+SELECT DISTINCT k.kode_kelas, k.nama_kelas, p.kode_prodi, p.nama_prodi
+	FROM kelas AS k
+	INNER JOIN prodi AS p
+    ON k.kode_prodi=p.kode_prodi;
+
+-- join implisit
+SELECT *
+FROM kelas, prodi
+WHERE kelas.kode_prodi=prodi.kode_prodi;
+
+SELECT k.kode_kelas AS 'KODE KELAS',k.nama_kelas AS 'NAMA KELAS',p.kode_prodi 'KODE PRODI',p.nama_prodi 'NAMA PRODI'
+FROM kelas k, prodi p
+WHERE k.kode_prodi=p.kode_prodi;
+
+-- join banyak tabel 
+SELECT jadwal.kode_jadwal, dosen.nama_dosen, kelas.nama_kelas, hari.nama_hari
+FROM jadwal
+	INNER JOIN dosen ON dosen.kode_dosen=jadwal.kode_dosen
+    INNER JOIN kelas ON kelas.kode_kelas=jadwal.kode_kelas
+    INNER JOIN hari ON hari.kode_hari=jadwal.kode_hari;
+    
+-- LEBIH SIMPLE (eksplisit)
+SELECT j.kode_jadwal, d.nama_dosen, k.nama_kelas, h.nama_hari
+FROM jadwal j
+	INNER JOIN dosen d ON d.kode_dosen=j.kode_dosen
+    INNER JOIN kelas k ON k.kode_kelas=j.kode_kelas
+    INNER JOIN hari h ON h.kode_hari=j.kode_hari
+ORDER BY d.nama_dosen ASC;
+
+-- implisit ^
+SELECT j.kode_jadwal, d.nama_dosen, k.nama_kelas, h.nama_hari
+FROM jadwal j, dosen d, kelas k, hari h
+WHERE 
+d.kode_dosen=j.kode_dosen AND 
+k.kode_kelas=j.kode_kelas AND
+h.kode_hari=j.kode_hari;
+
+-- lihat jadwal di kelas A
+SELECT j.kode_jadwal, d.nama_dosen, k.nama_kelas, h.nama_hari
+FROM jadwal j
+	INNER JOIN dosen d ON d.kode_dosen=j.kode_dosen
+    INNER JOIN kelas k ON k.kode_kelas=j.kode_kelas
+    INNER JOIN hari h ON h.kode_hari=j.kode_hari
+WHERE k.nama_kelas LIKE '%A'
+ORDER BY k.nama_kelas ASC; -- DESC  <Z-A>
+
+-- LEFT outer join 
+-- tabel sebelah kiri tampil semua jika tidak ada data yang cocok dengan tabel do sebelah kanan maka akan bernilai NULL
+SELECT * FROM kelas;
+SELECT * FROM prodi;
+
+SELECT DISTINCT k.kode_kelas, k.nama_kelas, p.kode_prodi, p.nama_prodi
+	FROM kelas AS k -- <kiri>
+	LEFT  JOIN prodi AS p ON k.kode_prodi=p.kode_prodi; -- <KANAN>
+
+SELECT DISTINCT k.kode_kelas, k.nama_kelas, p.kode_prodi, p.nama_prodi
+	FROM prodi AS p
+	LEFT OUTER JOIN kelas AS k ON k.kode_prodi=p.kode_prodi;
+
+
+-- RIGHT OUTER JOIN
+SELECT DISTINCT k.kode_kelas, k.nama_kelas, p.kode_prodi, p.nama_prodi
+	FROM kelas AS k -- <kiri>
+	RIGHT OUTER JOIN prodi AS p ON k.kode_prodi=p.kode_prodi;
+    
+-- FULL JOIN / FULL OUTER JOIN
+SELECT k.nama_kelas, p.nama_prodi
+FROM kelas k
+	LEFT OUTER JOIN prodi p ON k.kode_prodi=p.kode_prodi
+UNION ALL
+SELECT k.nama_kelas, p.nama_prodi
+FROM kelas k
+	RIGHT OUTER JOIN prodi p ON k.kode_prodi=p.kode_prodi;
+
+-- CROSS JOIN
+SELECT k.nama_kelas, p.nama_prodi
+FROM kelas k CROSS JOIN prodi p ;
+
+-- CROSS JOIN IMPLISIT
+select k.nama_kelas, p.nama_prodi
+from kelas k, prodi p;
+
+-- NO 2 , jadwal, dosen, mk
+SELECT DISTINCT d.nama_dosen 'Dosen Pengampu', m.nama_mk 'Nama Mata Kuliah'
+FROM jadwal j
+INNER JOIN dosen d ON d.kode_dosen=j.kode_dosen
+INNER JOIN mk m ON m.kode_mk=j.kode_mk
+ORDER BY d.nama_dosen ASC;
+
+select * from kelas;
+
+SELECT COUNT(kode_kelas) FROM KELAS where kode_prodi=1; 
+
+
+
+
+
+
+
+
