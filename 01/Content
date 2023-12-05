@@ -1,0 +1,125 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Feb 11, 2021 at 04:39 PM
+-- Server version: 10.4.6-MariaDB
+-- PHP Version: 7.3.9
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `selling_produk`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product`
+--
+
+CREATE TABLE `product` (
+  `id_product` int(11) NOT NULL,
+  `name` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`id_product`, `name`) VALUES
+(1, 'book'),
+(2, 'pencil'),
+(3, 'drawing book'),
+(4, 'pen');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `detail_selling`
+--
+
+CREATE TABLE `detail_selling` (
+  `id_selling` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
+  `price` int(11) NOT NULL,
+  `total` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `detail_selling`
+--
+
+INSERT INTO `detail_selling` (`id_selling`, `id_product`, `price`, `total`) VALUES
+(1, 4, 2, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `selling`
+--
+
+CREATE TABLE `selling` (
+  `id_selling` int(11) NOT NULL,
+  `date_transaction` date NOT NULL,
+  `cashier` varchar(20) NOT NULL,
+  `total_selling` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `selling`
+--
+
+INSERT INTO `selling` (`id_selling`, `date_transaction`, `cashier`, `total_selling`) VALUES
+(1, '2021-02-01', 'Doni', 31000),
+(2, '2021-02-02', 'Doni', 6000);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `product`
+--
+ALTER TABLE `product`
+  ADD PRIMARY KEY (`id_product`);
+
+--
+-- Indexes for table `detail_selling`
+--
+ALTER TABLE `detail_selling`
+  ADD PRIMARY KEY (`id_selling`,`id_product`),
+  ADD KEY `id_product` (`id_product`),
+  ADD KEY `id_selling` (`id_selling`);
+
+--
+-- Indexes for table `selling`
+--
+ALTER TABLE `selling`
+  ADD PRIMARY KEY (`id_selling`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `detail_selling`
+--
+ALTER TABLE `detail_selling`
+  ADD CONSTRAINT `detail_selling_ibfk_1` FOREIGN KEY (`id_selling`) REFERENCES `selling` (`id_selling`),
+  ADD CONSTRAINT `detail_selling_ibfk_2` FOREIGN KEY (`id_product`) REFERENCES `product` (`id_product`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
