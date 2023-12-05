@@ -1,0 +1,132 @@
+USE percobaan_join;
+
+SELECT * FROM dosen; -- lecture
+SELECT * from hari; -- days
+SELECT * FROM jadwal; -- schedule 
+SELECT * FROM jp; -- course hours
+SELECT * FROM kelas; -- classses
+SELECT * FROM mk; -- course
+SELECT * FROM prodi; -- department
+SELECT * FROM ruang; -- room 
+
+SELECT nama_dosen FROM dosen;
+SELECT kode_dosen as kd, nama_dosen as nd FROM dosen as d;
+
+-- WHERE
+SELECT * FROM DOSEN 
+	WHERE kode_dosen='D001';
+
+
+SELECT * 
+FROM DOSEN
+WHERE nama_dosen LIKE 'A%';
+
+SELECT * 
+FROM DOSEN
+WHERE nama_dosen LIKE '%Annisa%';
+
+
+SELECT * 
+FROM DOSEN
+WHERE nama_dosen LIKE '%M';
+
+-- select 2 table
+-- implicit -> where
+-- explicit -> join
+
+-- where
+SELECT * FROM kelas;
+SELECT * FROM prodi;
+
+SELECT nama_kelas, nama_prodi
+FROM kelas, prodi
+WHERE kelas.kode_prodi=prodi.kode_prodi;
+
+
+SELECT k.nama_kelas, p.nama_prodi
+FROM kelas as k, prodi as p
+WHERE k.kode_prodi=p.kode_prodi;
+
+SELECT k.nama_kelas, p.nama_prodi
+FROM kelas k, prodi p
+WHERE k.kode_prodi=p.kode_prodi;
+
+-- kode_jadwal, kode_ruang, nama_ruang
+SELECT j.kode_jadwal, j.kode_ruang, r.nama_ruang, r.deskripsi_ruang
+FROM jadwal j, ruang r
+WHERE j.kode_ruang=r.kode_ruang;
+
+-- kode_jadwal, nama_ruang, nama_dosen -> 3 tables jadwal, ruang, dosen
+SELECT j.kode_jadwal, d.nama_dosen, r.nama_ruang, r.deskripsi_ruang
+FROM jadwal j, ruang r, dosen d
+WHERE 
+j.kode_ruang=r.kode_ruang AND
+j.kode_dosen=d.kode_dosen AND 
+d.nama_dosen LIKE 'Ade Ismail'
+ORDER BY d.nama_dosen ASC;
+
+
+SELECT j.kode_jadwal, d.nama_dosen, r.nama_ruang, r.deskripsi_ruang
+FROM jadwal j, ruang r, dosen d
+WHERE 
+j.kode_ruang=r.kode_ruang AND
+j.kode_dosen=d.kode_dosen AND 
+d.nama_dosen LIKE '%Ade%'
+ORDER BY d.nama_dosen ASC;
+
+-- JOIN
+
+SELECT nama_kelas, nama_prodi
+FROM kelas
+INNER JOIN prodi
+ON kelas.kode_prodi=prodi.kode_prodi;
+
+
+SELECT k.nama_kelas, p.nama_prodi
+FROM kelas k
+INNER JOIN prodi p
+ON k.kode_prodi=p.kode_prodi
+WHERE 
+k.nama_kelas LIKE '%TI-1%'
+ORDER BY k.nama_kelas ASC;
+
+
+SELECT k.nama_kelas, p.nama_prodi
+FROM kelas k, prodi p
+WHERE k.kode_prodi=p.kode_prodi AND 
+      K.NAMA_KELAS LIKE '%TI-1%'
+ORDER BY k.nama_kelas ASC;
+
+
+SELECT j.kode_jadwal, d.nama_dosen, r.nama_ruang, r.deskripsi_ruang
+FROM jadwal j, ruang r, dosen d
+WHERE 
+j.kode_ruang=r.kode_ruang AND
+j.kode_dosen=d.kode_dosen AND
+r.nama_ruang LIKE 'rt06'
+ORDER BY d.nama_dosen ASC;
+
+-- jumlah dosen mengajar di ruang 6
+SELECT COUNT(d.nama_dosen) 'jumlah dosen'
+FROM jadwal j, ruang r, dosen d
+WHERE 
+j.kode_ruang=r.kode_ruang AND
+j.kode_dosen=d.kode_dosen AND
+r.nama_ruang LIKE 'rt06';
+
+-- jumlah dosen mengajar di setiao ruang
+SELECT COUNT(d.nama_dosen) 'jumlah dosen per ruangan', r. nama_ruang
+FROM jadwal j, ruang r, dosen d
+WHERE 
+j.kode_ruang=r.kode_ruang AND
+j.kode_dosen=d.kode_dosen 
+GROUP BY r.kode_ruang
+ORDER BY r. nama_ruang ASC;
+
+-- SOFTWARE HOUSE
+USE software_house;
+
+SELECT * FROM penugasan;
+
+SELECT DISTINCT total_jam 
+FROM penugasan;
